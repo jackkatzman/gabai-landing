@@ -2,99 +2,990 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>GabAi – Your Everyday Voice-First Assistant</title>
+  <title>GabAI – Voice-First Assistant for Real Life</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+        content="GabAI is a voice-first AI assistant built for ADHD brains, busy parents, and real life. Smart lists, powerful reminders, group SMS, and calendar integration in one clean app." />
   <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #0b1020;
+      --bg-soft-2: #0f172a;
+      --bg-light: #f9fafb;
+      --text-main: #020617;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.08);
+      --accent-2: #a855f7;
+      --border-subtle: #e5e7eb;
+      --card-border: #e5e7eb;
+      --radius-lg: 18px;
+      --radius-xl: 26px;
+      --shadow-soft: 0 20px 45px rgba(15, 23, 42, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #111827, #020617);
-      color: #f9fafb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(129, 140, 248, 0.2), transparent 55%),
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.2), transparent 55%),
+        #f3f4f6;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    header {
       display: flex;
-      min-height: 100vh;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 32px;
     }
-    .card {
-      max-width: 720px;
-      width: 100%;
-      margin: 16px;
-      padding: 32px 24px;
-      border-radius: 20px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid #1f2937;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.6);
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 2rem;
-      letter-spacing: -0.04em;
-    }
-    p {
-      margin: 0 0 16px;
-      color: #9ca3af;
-      line-height: 1.5;
-      font-size: 0.95rem;
-    }
-    .btn-row {
-      margin-top: 20px;
+
+    .brand {
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       gap: 10px;
     }
-    a.button {
-      display: inline-flex;
+
+    .logo-bubble {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 0, #38bdf8, #2563eb);
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 10px 18px;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-check {
+      width: 18px;
+      height: 18px;
       border-radius: 999px;
+      border: 2px solid white;
+      border-top-color: transparent;
+      border-left-color: transparent;
+      transform: rotate(40deg);
+      position: relative;
+    }
+
+    .logo-check::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: inherit;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      opacity: 0.5;
+    }
+
+    .brand-title {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      font-size: 1.05rem;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .top-cta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(18px);
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.24);
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 8px 16px;
       border: 1px solid transparent;
-      background: linear-gradient(135deg, #2563eb, #4f46e5);
-      color: #f9fafb;
       font-size: 0.9rem;
       font-weight: 500;
-      text-decoration: none;
-      box-shadow: 0 8px 22px rgba(37,99,235,0.6);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      color: var(--text-main);
+      white-space: nowrap;
     }
-    a.button.secondary {
-      background: transparent;
-      border-color: #374151;
-      color: #e5e7eb;
-      box-shadow: none;
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      border-color: rgba(129, 140, 248, 0.5);
+      color: #f9fafb;
+      box-shadow: 0 10px 26px rgba(37, 99, 235, 0.6);
     }
-    small {
-      display: block;
-      margin-top: 10px;
+
+    .btn-ghost {
+      border-color: rgba(148, 163, 184, 0.7);
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--text-muted);
+    }
+
+    .btn .icon {
+      font-size: 1.05rem;
+    }
+
+    /* HERO */
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.3fr);
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 52px;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .hero-eyebrow span.badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #1d4ed8;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 3.1vw + 1.4rem, 3.3rem);
+      line-height: 1.03;
+      letter-spacing: -0.045em;
+      margin: 0 0 12px;
+    }
+
+    .hero-title span.accent {
+      background: linear-gradient(135deg, #2563eb, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .hero-footnote {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .hero-footnote strong {
+      color: #111827;
+    }
+
+    .hero-card {
+      border-radius: var(--radius-xl);
+      padding: 22px 20px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(209, 213, 219, 0.8);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .hero-card-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .hero-card-badge {
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: rgba(37, 99, 235, 0.07);
+      color: #1d4ed8;
+    }
+
+    .metrics-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      flex: 1 1 120px;
+      border-radius: 14px;
+      padding: 10px 11px;
+      border: 1px dashed rgba(209, 213, 219, 0.9);
+      font-size: 0.78rem;
+    }
+
+    .metric-label {
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .hero-card-list {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0 0 6px;
+      padding-left: 18px;
+    }
+
+    .hero-card-list li {
+      margin-bottom: 4px;
+    }
+
+    .hero-card-footer {
+      margin-top: 8px;
       font-size: 0.75rem;
-      color: #6b7280;
+      color: var(--text-muted);
+    }
+
+    /* SECTIONS */
+
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .section-tag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* GRID CARDS */
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 960px) {
+      .grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .grid-3 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .feature-card {
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 16px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    .feature-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .feature-title {
+      font-size: 0.96rem;
+      margin: 0 0 6px;
+    }
+
+    .feature-body {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0 0 4px;
+    }
+
+    .feature-list {
+      margin: 6px 0 0;
+      padding-left: 18px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .feature-list li {
+      margin-bottom: 3px;
+    }
+
+    /* 2-column sections */
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.3fr);
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 860px) {
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 18px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 0.96rem;
+      color: #111827;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      font-size: 0.75rem;
+      background: rgba(249, 250, 251, 0.9);
+      color: #374151;
+    }
+
+    /* PRICING */
+
+    .pricing {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 720px) {
+      .pricing {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .plan {
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 20px;
+      background: #ffffff;
+      border: 1px solid rgba(209, 213, 219, 0.95);
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .plan-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--text-muted);
+    }
+
+    .plan-name {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .plan-price {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .plan-price span {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .plan-list {
+      margin: 6px 0 10px;
+      padding-left: 18px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .plan-list li {
+      margin-bottom: 3px;
+    }
+
+    .badge-pill {
+      align-self: flex-start;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: rgba(34, 197, 94, 0.08);
+      color: #15803d;
+      border: 1px solid rgba(74, 222, 128, 0.6);
+    }
+
+    .plan .btn-primary {
+      margin-top: 4px;
+    }
+
+    /* PERFECT FOR */
+
+    .perfect-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .perfect-list li {
+      margin-bottom: 3px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid rgba(209, 213, 219, 0.9);
+      padding-top: 18px;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-underline-offset: 3px;
     }
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>GabAi</h1>
-    <p>
-      GabAi is your everyday voice-first assistant for reminders, lists, and all the
-      little “don’t let me forget” moments. This site is the home for the app –
-      and the place to grab the latest download links.
-    </p>
-    <p>
-      Right now the app is running as a live prototype. Tap below to open it in your browser.
-      Mobile app downloads (Android / iOS) will be added here when they’re ready.
-    </p>
-    <div class="btn-row">
-      <!-- CHANGE THIS URL to your Replit app URL -->
-      <a class="button" href="YOUR_REPLIT_APP_URL_HERE" target="_blank">
-        Launch GabAi Web App
-      </a>
-      <a class="button secondary" href="mailto:jack@symcousa.com">
-        Get early-access updates
-      </a>
-    </div>
-    <small>© <span id="year"></span> GabAi</small>
-  </main>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="logo-bubble">
+          <div class="logo-check"></div>
+        </div>
+        <div>
+          <div class="brand-title">GabAI</div>
+          <div class="brand-sub">Voice-first assistant for real life</div>
+        </div>
+      </div>
+      <div class="top-cta">
+        <div class="pill">
+          <div class="pill-dot"></div>
+          Live prototype · Android APK + Web
+        </div>
+        <a class="btn btn-primary" href="YOUR_REPLIT_APP_URL_HERE" target="_blank" rel="noreferrer">
+          <span class="icon">⚡</span>
+          Launch Web App
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="badge">ADHD-friendly</span>
+            Designed for brains with too many tabs open.
+          </div>
+          <h1 class="hero-title">
+            The <span class="accent">voice-first assistant</span> that actually gets your life.
+          </h1>
+          <p class="hero-subtitle">
+            GabAI turns your voice into smart lists, real reminders, and shared plans –
+            without you fighting a cluttered app or digging through group chats.
+          </p>
+          <div class="hero-cta-row">
+            <a class="btn btn-primary" href="YOUR_REPLIT_APP_URL_HERE" target="_blank" rel="noreferrer">
+              <span class="icon">🎙️</span>
+              Start talking to GabAI
+            </a>
+            <a class="btn btn-ghost" href="#pricing">
+              <span class="icon">💳</span>
+              See pricing & premium
+            </a>
+          </div>
+          <div class="hero-footnote">
+            <strong>Perfect for:</strong> people with ADHD, busy parents, small teams,
+            and anyone who prefers talking over typing.
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-hidden="true">
+          <div class="hero-card-header">
+            <div>
+              <div class="hero-card-title">How a day with GabAI feels</div>
+              <div style="font-size:0.78rem;color:var(--text-muted);">
+                One place for lists, reminders, and group follow-through.
+              </div>
+            </div>
+            <div class="hero-card-badge">Today</div>
+          </div>
+
+          <div class="metrics-row">
+            <div class="metric">
+              <div class="metric-label">Reminders you’ll actually see</div>
+              <div class="metric-value">SMS + voice calls</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">List sync</div>
+              <div class="metric-value">Real-time for the whole family</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Setup time</div>
+              <div class="metric-value">&lt; 2 minutes</div>
+            </div>
+          </div>
+
+          <ul class="hero-card-list">
+            <li>“Remind me Sunday night to order snacks for the kids’ trip.”</li>
+            <li>“Add eggs, yogurts, and water bottles to the Shabbos list.”</li>
+            <li>“Text my siblings at 9PM: ‘Don’t forget about the family Zoom.’”</li>
+          </ul>
+          <div class="hero-card-footer">
+            GabAI turns this into calendar events, SMS reminders, and shared lists –
+            without you touching a spreadsheet or calendar UI.
+          </div>
+        </aside>
+      </section>
+
+      <!-- FEATURES OVERVIEW -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Everything GabAI does for you</h2>
+          <div class="section-tag">
+            Voice-first AI · Smart lists · Real reminders · Group SMS · Calendar integration
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <!-- Voice-First AI Assistant -->
+          <article class="feature-card">
+            <div class="feature-icon">🎙️</div>
+            <h3 class="feature-title">Voice-First AI Assistant</h3>
+            <p class="feature-body">
+              Talk like a human, not like a robot. GabAI understands context, remembers your preferences, and adapts to how you speak.
+            </p>
+            <ul class="feature-list">
+              <li>Natural conversation via voice or text</li>
+              <li>Smart understanding with persistent context</li>
+              <li>Multilingual support for your preferred language</li>
+              <li>Personalized responses that learn your style, interests, and habits</li>
+              <li>Voice input & optional voice output</li>
+            </ul>
+          </article>
+
+          <!-- Smart Lists -->
+          <article class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3 class="feature-title">Smart Lists Management</h3>
+            <p class="feature-body">
+              Turn messy notes and chats into clean, living lists that you’ll actually use.
+            </p>
+            <ul class="feature-list">
+              <li>Shopping & grocery lists with auto-categories</li>
+              <li>Punch lists for home improvement & contractors</li>
+              <li>Waiting lists for packages, callbacks, and follow-ups</li>
+              <li>Classic to-dos plus fully custom list types</li>
+              <li>Quantities, units, prices, and budget tracking</li>
+              <li>Shared lists with custom sorting by category, priority, or date</li>
+            </ul>
+          </article>
+
+          <!-- Smart Reminders -->
+          <article class="feature-card">
+            <div class="feature-icon">⏰</div>
+            <h3 class="feature-title">Smart Reminders</h3>
+            <p class="feature-body">
+              Reminders that don’t get lost in a notification graveyard.
+            </p>
+            <ul class="feature-list">
+              <li>SMS reminders that hit your phone directly</li>
+              <li>Optional voice call reminders when it’s critical</li>
+              <li>Recurring reminders (daily, weekly, monthly)</li>
+              <li>Timezone-aware (America/New_York by default)</li>
+              <li>Custom lead times (5, 15, 30 minutes or your own)</li>
+              <li>Export as calendar events (.ics) with one tap</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- GROUP REMINDERS + CALENDAR/SCHEDULE -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Groups, scheduling, and events – handled</h2>
+        </div>
+
+        <div class="grid-3">
+          <!-- Group Reminders -->
+          <article class="feature-card">
+            <div class="feature-icon">👥</div>
+            <h3 class="feature-title">Group Reminders (Premium)</h3>
+            <p class="feature-body">
+              Send one reminder to an entire group – and grow the product at the same time.
+            </p>
+            <ul class="feature-list">
+              <li>Multi-person SMS reminders in one shot</li>
+              <li>Contact groups for family, friends, or teams</li>
+              <li>Viral growth design:
+                <em>“From [Your Name]: [Message]. Get GabAI at gabai.ai.”</em>
+              </li>
+              <li>30-day free trial on all group features</li>
+              <li>Built-in friend-to-friend invite loop</li>
+            </ul>
+          </article>
+
+          <!-- Calendar & Scheduling -->
+          <article class="feature-card">
+            <div class="feature-icon">📅</div>
+            <h3 class="feature-title">Calendar & Scheduling</h3>
+            <p class="feature-body">
+              Don’t fight calendar apps; talk to GabAI and let it do the boring parts.
+            </p>
+            <ul class="feature-list">
+              <li>Event creation with AI help for title, time, and location</li>
+              <li>OCR scanning – snap a flyer/invitation to auto-create events</li>
+              <li>Download events as .ics files into your calendar</li>
+              <li>See all events in a clear calendar-style view</li>
+            </ul>
+          </article>
+
+          <!-- Contacts & OCR -->
+          <article class="feature-card">
+            <div class="feature-icon">📞</div>
+            <h3 class="feature-title">Contacts & Document Scanning</h3>
+            <p class="feature-body">
+              Use the data you already have – phone contacts, screenshots, and photos.
+            </p>
+            <ul class="feature-list">
+              <li>Contact integration & quick contact picker</li>
+              <li>Contact groups for reminders and lists</li>
+              <li>Photo capture and OCR text extraction</li>
+              <li>Event recognition from flyers and invites</li>
+              <li>Scan receipts, notes, business cards, and more</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- AUTH + PERSONALIZATION + MOBILE -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Built for real people, not power users</h2>
+        </div>
+
+        <div class="grid-3">
+          <!-- Auth -->
+          <article class="feature-card">
+            <div class="feature-icon">🔐</div>
+            <h3 class="feature-title">Simple, Secure Sign-In</h3>
+            <p class="feature-body">
+              Getting into your assistant shouldn’t feel like an IT project.
+            </p>
+            <ul class="feature-list">
+              <li>Google Sign-In for one-tap login</li>
+              <li>Phone verification with SMS</li>
+              <li>Secure sessions with enterprise-grade security</li>
+              <li>Demo access so people can try it fast</li>
+              <li>Privacy-first: your data stays your own</li>
+            </ul>
+          </article>
+
+          <!-- Personalization -->
+          <article class="feature-card">
+            <div class="feature-icon">🌙</div>
+            <h3 class="feature-title">Preferences & Personalization</h3>
+            <p class="feature-body">
+              The more you use GabAI, the more it feels like it was built just for you.
+            </p>
+            <ul class="feature-list">
+              <li>Sleep schedule for smart reminder timing</li>
+              <li>Dietary preferences & restrictions saved for shopping</li>
+              <li>Respect for religious observances and holidays</li>
+              <li>Choose your communication style: formal, casual, friendly</li>
+              <li>Tracks interests, family details, and notification preferences</li>
+              <li>Dark mode for late-night planning</li>
+            </ul>
+          </article>
+
+          <!-- Mobile experience -->
+          <article class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3 class="feature-title">Mobile-Optimized Experience</h3>
+            <p class="feature-body">
+              Built for the device that’s already in your hand all day.
+            </p>
+            <ul class="feature-list">
+              <li>Android APK with a native-feeling experience</li>
+              <li>Offline-first core flows</li>
+              <li>Thumb-friendly, bottom navigation UI</li>
+              <li>Fast, responsive interface with smooth feedback</li>
+              <li>Clean, uncluttered layout that’s ADHD-friendly</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- NOTIFICATIONS + PRIVACY + ADHD + COLLAB -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Notifications, privacy, and collaboration</h2>
+        </div>
+
+        <div class="grid-3">
+          <!-- Notifications -->
+          <article class="feature-card">
+            <div class="feature-icon">🔔</div>
+            <h3 class="feature-title">Notification System</h3>
+            <p class="feature-body">
+              The point of a reminder is to actually reach you.
+            </p>
+            <ul class="feature-list">
+              <li>SMS notifications as the default channel</li>
+              <li>In-app push notifications (coming soon)</li>
+              <li>Optional voice calls for critical reminders</li>
+              <li>Adjustable lead times and sound controls</li>
+            </ul>
+          </article>
+
+          <!-- Privacy -->
+          <article class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3 class="feature-title">Privacy & Compliance</h3>
+            <p class="feature-body">
+              Growth is great, but not at the cost of trust.
+            </p>
+            <ul class="feature-list">
+              <li>TCPA-compliant SMS flows</li>
+              <li>Explicit opt-in for all communications</li>
+              <li>Encrypted storage and privacy-first design</li>
+              <li>GDPR-ready architecture</li>
+            </ul>
+          </article>
+
+          <!-- ADHD + Collaboration -->
+          <article class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">ADHD-Friendly & Collaborative</h3>
+            <p class="feature-body">
+              Built around how people actually think, remember, and share work.
+            </p>
+            <ul class="feature-list">
+              <li>Voice-first capture so you don’t lose thoughts</li>
+              <li>Simple UI with clear, visual organization</li>
+              <li>One-tap common actions you use every day</li>
+              <li>Shared lists with view/edit permissions</li>
+              <li>Real-time sync and share codes for fast collaboration</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- SMART ANALYTICS + PERFECT FOR -->
+      <section class="section">
+        <div class="two-col">
+          <div class="card">
+            <h3>📊 Smart Analytics (Coming Soon)</h3>
+            <p>
+              GabAI will quietly watch patterns and surface just the right amount
+              of insight – without turning your life into a dashboard.
+            </p>
+            <ul class="feature-list">
+              <li>Productivity patterns across days and weeks</li>
+              <li>Shopping budget and spending awareness</li>
+              <li>Reminder completion rates and follow-through trends</li>
+              <li>Usage insights that help you tune notifications</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Perfect for</h3>
+            <ul class="perfect-list">
+              <li>✅ People with ADHD who forget important tasks</li>
+              <li>✅ Busy parents juggling school, carpools, and real life</li>
+              <li>✅ Professionals running multiple projects and clients</li>
+              <li>✅ Anyone who prefers talking over typing</li>
+              <li>✅ Groups planning trips, events, or community activities</li>
+              <li>✅ Families sharing shopping and to-do lists</li>
+            </ul>
+            <div class="chips">
+              <span class="chip">ADHD-friendly</span>
+              <span class="chip">Voice-first</span>
+              <span class="chip">Shared lists</span>
+              <span class="chip">SMS & calls</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRICING -->
+      <section class="section" id="pricing">
+        <div class="section-header">
+          <h2 class="section-title">Pricing</h2>
+          <div class="section-tag">
+            Start free. Upgrade when you’re ready to run groups and serious SMS flows.
+          </div>
+        </div>
+
+        <div class="pricing">
+          <!-- Free -->
+          <div class="plan">
+            <div class="plan-label">Free plan</div>
+            <div class="plan-name">Personal productivity</div>
+            <div class="plan-price">$0 <span>/ forever</span></div>
+            <ul class="plan-list">
+              <li>Voice-first AI assistant</li>
+              <li>Smart lists & personal reminders</li>
+              <li>Calendar integration via .ics downloads</li>
+              <li>Basic SMS notifications</li>
+              <li>Single-user lists and events</li>
+            </ul>
+            <a class="btn btn-primary" href="YOUR_REPLIT_APP_URL_HERE" target="_blank" rel="noreferrer">
+              Get started free
+            </a>
+          </div>
+
+          <!-- Premium -->
+          <div class="plan">
+            <div class="badge-pill">30-day free trial</div>
+            <div class="plan-label">Premium plan</div>
+            <div class="plan-name">Groups & power reminders</div>
+            <div class="plan-price">$9.99 <span>/ month</span></div>
+            <ul class="plan-list">
+              <li>Everything in Free, plus:</li>
+              <li>Group reminders & multi-person SMS</li>
+              <li>Unlimited SMS notifications</li>
+              <li>Advanced contact groups and collaboration</li>
+              <li>Viral growth SMS design to invite friends</li>
+            </ul>
+            <a class="btn btn-primary" href="YOUR_REPLIT_APP_URL_HERE" target="_blank" rel="noreferrer">
+              Start 30-day trial
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>© <span id="year"></span> GabAI. All rights reserved.</div>
+      <div>
+        Built for real life. Questions? <a href="mailto:jack@symcousa.com">jack@symcousa.com</a>
+      </div>
+    </footer>
+  </div>
+
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
